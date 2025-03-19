@@ -2,16 +2,70 @@
 # Model Deployment : Containerizing and Deploying Machine Learning API Endpoints on Open-Source Platforms
 
 ***
-### [**John Pauline Pineda**](https://github.com/JohnPaulinePineda) <br> <br> *February 22, 2025*
+### [**John Pauline Pineda**](https://github.com/JohnPaulinePineda) <br> <br> *March 5, 2025*
 ***
 
 * [**1. Table of Contents**](#TOC)
+    * [1.1 Model Development](#1.1)
+        * [1.1.1 Data Background](#1.1.1)
+        * [1.1.2 Model Building](#1.1.2)
+        * [1.1.3 Model Inference](#1.1.3)
+    * [1.2 Application Programming Interface (API) Development](#1.2)
+        * [1.2.1 API Building](#1.2.1)
+        * [1.2.2 API Testing](#1.2.2)
+    * [1.3 Application Containerization](#1.3)
+        * [1.3.1 Docker File Creation](#1.3.1)
+        * [1.3.2 Docker Image Building](#1.3.2)
+        * [1.3.3 Docker Image Testing](#1.3.3)
+    * [1.4 Application Programming Interface (API) Deployment](#1.4)
+        * [1.4.1 API Container Hosting](#1.4.1)
+    * [1.5 User Interface (UI) Development](#1.5)
+        * [1.5.1 UI Building With API Calls](#1.5.1)
+    * [1.6 Web Application Deployment](#1.6)
+        * [1.6.1 UI Hosting](#1.6.1)
+    * [1.7 Consolidated Findings](#1.7)
 * [**2. Summary**](#Summary)   
 * [**3. References**](#References)
 
 ***
 
 # 1. Table of Contents <a class="anchor" id="TOC"></a>
+
+## 1.1. Model Development <a class="anchor" id="1.1"></a>
+
+### 1.1.1 Data Background <a class="anchor" id="1.1.1"></a>
+
+### 1.1.2 Model Building <a class="anchor" id="1.1.2"></a>
+
+### 1.1.3 Model Inference <a class="anchor" id="1.1.3"></a>
+
+## 1.2. Application Programming Interface (API) Development <a class="anchor" id="1.2"></a>
+
+### 1.2.1 API Building <a class="anchor" id="1.2.1"></a>
+
+### 1.2.2 API Testing <a class="anchor" id="1.2.2"></a>
+
+## 1.3. Application Containerization <a class="anchor" id="1.3"></a>
+
+### 1.3.1 Docker File Creation <a class="anchor" id="1.3.1"></a>
+
+### 1.3.2 Docker Image Building <a class="anchor" id="1.3.2"></a>
+
+### 1.3.3 Docker Image Testing <a class="anchor" id="1.3.3"></a>
+
+## 1.4. Application Programming Interface (API) Deployment <a class="anchor" id="1.4"></a>
+
+### 1.4.1 API Container Hosting <a class="anchor" id="1.4.1"></a>
+
+## 1.5. User Interface (UI) Development <a class="anchor" id="1.5"></a>
+
+### 1.5.1 UI Building With API Calls <a class="anchor" id="1.5.1"></a>
+
+## 1.6. Web Application Deployment <a class="anchor" id="1.6"></a>
+
+### 1.6.1 UI Hosting <a class="anchor" id="1.6.1"></a>
+
+## 1.7. Consolidated Findings <a class="anchor" id="1.7"></a>
 
 # 2. Summary <a class="anchor" id="Summary"></a>
 
