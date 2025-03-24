@@ -2,7 +2,7 @@
 # Model Deployment : Containerizing and Deploying Machine Learning API Endpoints on Open-Source Platforms
 
 ***
-### [**John Pauline Pineda**](https://github.com/JohnPaulinePineda) <br> <br> *March 5, 2025*
+### [**John Pauline Pineda**](https://github.com/JohnPaulinePineda) <br> <br> *April 5, 2025*
 ***
 
 * [**1. Table of Contents**](#TOC)
@@ -122,7 +122,84 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
 
 ### 1.2.1 API Building <a class="anchor" id="1.2.1"></a>
 
+1. An API code using the FastAPI framework was developed for deploying a survival prediction model with the steps described as follows:
+    * **Loading Python Libraries**
+        * Imported necessary libraries such as FastAPI, HTTPException, and BaseModel for API development.
+        * Included libraries for survival analysis (sksurv, lifelines), data manipulation (numpy, pandas), and visualization (matplotlib).
+        * Used io and base64 for encoding and handling image outputs.
+    * **Defining File Paths**
+        * Specified the MODELS_PATH and PARAMETERS_PATH to locate the pre-trained survival model and related parameters.
+    * **Loading the Pre-Trained Survival Model**
+        * Loaded the pre-trained Cox Proportional Hazards (CoxPH) model (coxph_best_model.pkl) using joblib.load.
+        * Handled potential errors during model loading with a try-except block.
+    * **Loading Model Parameters**
+        * Loaded the median values for numeric features (numeric_feature_median_list.pkl) to support feature binning.
+        * Loaded the risk group threshold (coxph_best_model_risk_group_threshold.pkl) for categorizing patients into "High-Risk" and "Low-Risk" groups.
+    * **Defining Input Schemas**
+        * Created a Pydantic BaseModel class to define input schema for TestSample: For individual test cases, expecting a list of floats as input features.
+        * Created a Pydantic BaseModel class to define input schema for TrainList: For batch processing, expecting a list of lists of floats as input features.
+        * Created a Pydantic BaseModel class to define input schema for BinningRequest: For dichotomizing numeric features based on the median.
+        * Created a Pydantic BaseModel class to define input schema for KaplanMeierRequest: For generating Kaplan-Meier survival plots.
+    * **Initializing the FastAPI App**
+        * Created a FastAPI instance (app) to define and serve API endpoints.
+    * **Defining API Endpoints**
+        * Root Endpoint (/): A simple GET endpoint to validate API service connectivity.
+        * Individual Survival Prediction Endpoint (/compute-individual-coxph-survival-probability-class/): A POST endpoint to generate survival profiles, estimate survival probabilities, and predict risk categories for individual test cases.
+        * Batch Survival Profile Endpoint (/compute-list-coxph-survival-profile/): A POST endpoint to generate survival profiles for a batch of cases.
+        * Feature Binning Endpoint (/bin-numeric-model-feature/): A POST endpoint to dichotomize numeric features based on the median.
+        * Kaplan-Meier Plot Endpoint (/plot-kaplan-meier/): A POST endpoint to generate and return Kaplan-Meier survival plots.
+    * **Individual Survival Prediction Logic**
+        * Converted the input data into a pandas DataFrame with appropriate feature names.
+        * Used the pre-trained model’s predict_survival_function to generate the survival function for the test case.
+        * Predicted the risk category ("High-Risk" or "Low-Risk") based on the model’s risk score and threshold.
+        * Interpolated survival probabilities at predefined time points (e.g., 50, 100, 150, 200, 250 days).
+    * **Batch Survival Profile Logic**
+        * Converted the batch input data into a pandas DataFrame with appropriate feature names.
+        * Used the pre-trained model’s predict_survival_function to generate survival functions for all cases in the batch.
+        * Extracted and returned survival profiles for each case.
+    * **Feature Binning Logic**
+        * Converted the input data into a pandas DataFrame.
+        * Dichotomized the specified numeric feature into "Low" and "High" categories based on the median value.
+        * Returned the binned data as a list of dictionaries.
+    * **Kaplan-Meier Plot Logic**
+        * Converted the input data into a pandas DataFrame.
+        * Initialized a KaplanMeierFitter object to estimate survival probabilities.
+        * Plotted survival curves for different categories of the specified variable (e.g., "Low" vs. "High").
+        * Included an optional new case value for comparison in the plot.
+        * Saved the plot as a base64-encoded image and returned it in the API response.
+    * **Error Handling**
+        * Implemented robust error handling for invalid inputs or prediction errors using HTTPException.
+        * Returned meaningful error messages and appropriate HTTP status codes (e.g., 500 for server errors).
+    * **Running the FastAPI App**
+        * Used uvicorn to run the FastAPI app on localhost at port 8001.
+2. Key features of the API code included the following:
+    * Supported both individual and batch predictions, making the API versatile for different use cases.
+    * Provided survival probabilities, risk categories, and visualizations (Kaplan-Meier plots) for interpretable results.
+    * Enabled feature binning for categorical analysis of numeric features.
+
+
 ### 1.2.2 API Testing <a class="anchor" id="1.2.2"></a>
+
+1. The API code developed using the FastAPI framework deploying a survival prediction model was successfully tested with results presented as follows:
+    * **Server Initialization**: FastAPI application was started successfully, with Uvicorn running on http://127.0.0.1:8001, indicating that the server and its documentation are active and ready to process requests.
+    * **Hot Reloading Activated**: Uvicorn's reloader process (WatchFiles) was initialized, allowing real-time code changes without restarting the server.
+    * **Server Process Started**: The primary server process was assigned a process ID (18676), confirming successful application launch.
+    * **Application Ready State**: The server was shown to wait for incoming requests, ensuring all necessary components, including model loading, are successfully initialized.
+    * **Root Endpoint Accessed (GET /)**: The API received a GET request at the root endpoint and responded with 200 OK, confirming that the service is running and accessible.
+    * **Individual Survival Probability Request (POST /compute-individual-coxph-survival-probability-class/)**: A POST request was processed successfully, returning 200 OK, indicating that the API correctly computed survival probabilities and risk categorization for an individual test case.
+    * **Batch Survival Profile Request (POST /compute-list-coxph-survival-profile/)**: The API successfully processed a POST request for batch survival profile computation, returning 200 OK, confirming that multiple test cases were handled correctly.
+    * **Feature Binning Request (POST /bin-numeric-model-feature/)**: A POST request was successfully executed, returning 200 OK, confirming that the API correctly categorized numeric model features into dichotomous bins.
+    * **Kaplan-Meier Plot Request (POST /plot-kaplan-meier/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot was generated and returned as a base64-encoded image.
+    * **Invalid Input Handling (POST /compute-individual-coxph-survival-probability-class/)**: A malformed or incorrectly structured request resulted in a 422 Unprocessable Entity response, demonstrating the API's robust error-handling mechanism for invalid input formats.
+
+
+![sp_fastapi_activation.png](9326400a-13dc-4917-ad6a-73e9d63d6453.png)
+
+![sp_fastapi_documentation_endpoints.png](d0395784-b162-4479-99fb-0ac2c4d5bc84.png)
+
+![sp_fastapi_documentation_schemas.png](563f92ce-5815-4391-b6c3-d3a5a0284c73.png)
+
+![sp_fastapi_endpoints.png](36438d4e-ae83-47f6-9c26-ba4babb1b0ef.png)
 
 
 ```python
@@ -701,7 +778,7 @@ else:
 
 
     
-![png](output_26_0.png)
+![png](output_30_0.png)
     
 
 
@@ -756,7 +833,7 @@ else:
 
 
     
-![png](output_28_0.png)
+![png](output_32_0.png)
     
 
 
@@ -911,7 +988,7 @@ else:
 
 
     
-![png](output_30_0.png)
+![png](output_34_0.png)
     
 
 
