@@ -7802,6 +7802,15 @@ a.anchor-link {
 </li>
 <li><strong>Defining File Paths</strong><ul>
 <li>Specified the MODELS_PATH and PARAMETERS_PATH to locate the pre-trained survival model and related parameters.</li>
+<li>Specified the DATASETS_PATH and PIPELINES_PATH to locate the data sets and preprocessing pipelines.</li>
+</ul>
+</li>
+<li><strong>Loading the Training Data</strong><ul>
+<li>Loaded the raw and preprocessed training data (X_train.csv, y_train and heart_failure_EDA.csv) using pd.read_csv.</li>
+</ul>
+</li>
+<li><strong>Loading the Preprocessing Pipeline</strong><ul>
+<li>Loaded the preprocessing pipeline (coxph_pipeline.pkl) involving a Yeo-Johnson transformer for numeric predictors using joblib.load.</li>
 </ul>
 </li>
 <li><strong>Loading the Pre-Trained Survival Model</strong><ul>
@@ -7815,6 +7824,7 @@ a.anchor-link {
 </ul>
 </li>
 <li><strong>Defining Input Schemas</strong><ul>
+<li>Created a Pydantic BaseModel class to define input schema for TestCaseRequest: For individual test cases, expecting a dictionary of floats and integers as input features.</li>
 <li>Created a Pydantic BaseModel class to define input schema for TestSample: For individual test cases, expecting a list of floats as input features.</li>
 <li>Created a Pydantic BaseModel class to define input schema for TrainList: For batch processing, expecting a list of lists of floats as input features.</li>
 <li>Created a Pydantic BaseModel class to define input schema for BinningRequest: For dichotomizing numeric features based on the median.</li>
@@ -7828,9 +7838,17 @@ a.anchor-link {
 <li><strong>Defining API Endpoints</strong><ul>
 <li>Root Endpoint (/): A simple GET endpoint to validate API service connectivity.</li>
 <li>Individual Survival Prediction Endpoint (/compute-individual-coxph-survival-probability-class/): A POST endpoint to generate survival profiles, estimate survival probabilities, and predict risk categories for individual test cases.</li>
-<li>Batch Survival Profile Endpoint (/compute-list-coxph-survival-profile/): A POST endpoint to generate survival profiles for a batch of cases.</li>
-<li>Feature Binning Endpoint (/bin-numeric-model-feature/): A POST endpoint to dichotomize numeric features based on the median.</li>
-<li>Kaplan-Meier Plot Endpoint (/plot-kaplan-meier/): A POST endpoint to generate and return Kaplan-Meier survival plots.</li>
+<li>Batch Survival Prediction Endpoint (/compute-list-coxph-survival-profile/): A POST endpoint to generate survival profiles for a batch of cases.</li>
+<li>Feature Binning Endpoint (/bin-numeric-model-feature/): A POST endpoint to dichotomize numeric features based on the median for a defined predictor.</li>
+<li>Kaplan-Meier Plot Endpoint (/plot-kaplan-meier/): A POST endpoint to generate and return Kaplan-Meier survival plots for a single defined predictor.</li>
+<li>Test Case Preprocessing Endpoint (/preprocess-test-case/): A POST endpoint to perform preprocessing for individual test cases.</li>
+<li>Kaplan-Meier Plot Grid Endpoint (/plot-kaplan-meier-grid/): A POST endpoint to generate and return Kaplan-Meier survival plots for all predictors.</li>
+<li>Cox Survival Plot Endpoint (/plot_coxph_survival_profile/): A POST endpoint to generate and return Cox survival plots.</li>
+</ul>
+</li>
+<li><strong>Defining Utility Functions</strong><ul>
+<li>Numeric Feature Binning Function (bin_numeric_feature): A utility function to dichotomize numeric features based on the median for any predictor.</li>
+<li>Kaplan-Meier Plot Profile Function (plot_kaplan_meier_profile): A utility function to generate and return Kaplan-Meier survival plots for any single predictor.</li>
 </ul>
 </li>
 <li><strong>Individual Survival Prediction Logic</strong><ul>
@@ -7860,6 +7878,36 @@ a.anchor-link {
 <li>Saved the plot as a base64-encoded image and returned it in the API response.</li>
 </ul>
 </li>
+<li><strong>Test Case Preprocessing Logic</strong><ul>
+<li>Converted the input data into a pandas DataFrame.</li>
+<li>Applied Yeo-Johnson transformation (from a pre-defined pipeline) to normalize numeric features.</li>
+<li>Reconstructed the transformed DataFrame with appropriate feature names.</li>
+<li>Called the bin_numeric_feature utility function to binarize numeric features by creating dichotomous bins.</li>
+<li>Encoded categorical features as "Absent" or "Present" based on their values.</li>
+<li>Returned the preprocessed test case as a dictionary in a format suitable for model inference.</li>
+</ul>
+</li>
+<li><strong>Kaplan-Meier Plot Grid Logic</strong><ul>
+<li>Preprocessed the test case to binarize numeric features and encode categorical features.</li>
+<li>Created a 2x3 grid of plots (one per predictor).</li>
+<li>Called the plot_kaplan_meier_profile utility function to generate baseline survival curves for each predictor.</li>
+<li>Overlaid the Kaplan-Meier survival curve of the test case for direct comparison.</li>
+<li>Encoded the final plot as a base64 string for easy transmission in API responses.</li>
+</ul>
+</li>
+<li><strong>Cox Survival Plot Logic</strong><ul>
+<li>Predicted survival functions for both the training dataset and the individual test case using the final Cox Proportional Hazards model.</li>
+<li>Classified the test case as "High-Risk" or "Low-Risk" based on the model’s predicted risk score and predefined threshold.</li>
+<li>Interpolated survival probabilities at predefined time points (50, 100, 150, 200, 250 days).</li>
+<li>Overlaid the survival function for the test case, using different colors and line styles based on the predicted risk category:<ul>
+<li>Low-Risk: Blue (solid for baseline, dotted for overlay).</li>
+<li>High-Risk: Red (solid for baseline, dotted for overlay).</li>
+</ul>
+</li>
+<li>Added vertical lines to indicate estimated survival probabilities at specific time points.</li>
+<li>Saved the plot as a base64-encoded image and returned it in the API response.</li>
+</ul>
+</li>
 <li><strong>Error Handling</strong><ul>
 <li>Implemented robust error handling for invalid inputs or prediction errors using HTTPException.</li>
 <li>Returned meaningful error messages and appropriate HTTP status codes (e.g., 500 for server errors).</li>
@@ -7873,8 +7921,8 @@ a.anchor-link {
 </li>
 <li>Key features of the API code included the following:<ul>
 <li>Supported both individual and batch predictions, making the API versatile for different use cases.</li>
-<li>Provided survival probabilities, risk categories, and visualizations (Kaplan-Meier plots) for interpretable results.</li>
-<li>Enabled feature binning for categorical analysis of numeric features.</li>
+<li>Provided survival probabilities, risk categories, and visualizations (Kaplan-Meier and Cox Survival plots) for interpretable results.</li>
+<li>Enabled feature preprocessing to transform the test case in a format suitable for model inference</li>
 </ul>
 </li>
 </ol>
@@ -7899,6 +7947,9 @@ a.anchor-link {
 <li><strong>Batch Survival Profile Request (POST /compute-list-coxph-survival-profile/)</strong>: The API successfully processed a POST request for batch survival profile computation, returning 200 OK, confirming that multiple test cases were handled correctly.</li>
 <li><strong>Feature Binning Request (POST /bin-numeric-model-feature/)</strong>: A POST request was successfully executed, returning 200 OK, confirming that the API correctly categorized numeric model features into dichotomous bins.</li>
 <li><strong>Kaplan-Meier Plot Request (POST /plot-kaplan-meier/)</strong>: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot was generated and returned as a base64-encoded image.</li>
+<li><strong>Test Case Preprocessing Request (POST /preprocess-test-case/)</strong>: The API successfully processed a POST request, returning 200 OK, indicating that an individual test cases was completed preprocessing and transformed to a format suitable for model inference.</li>
+<li><strong>Kaplan-Meier Plot Grid Request (POST /plot-kaplan-meier-grid/)</strong>: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot for the individual the test case in direct comparison with the baseline survival curves for each predictor was generated and returned as a base64-encoded image.</li>
+<li><strong>Cox Survival Plot Request (POST /plot_coxph_survival_profile/)</strong>: The API successfully processed a POST request, returning 200 OK, indicating that a Cox survival plot for the individual the test case in direct comparison with the baseline survival curves for all the training cases categorized by risk categories was generated and returned as a base64-encoded image.</li>
 <li><strong>Invalid Input Handling (POST /compute-individual-coxph-survival-probability-class/)</strong>: A malformed or incorrectly structured request resulted in a 422 Unprocessable Entity response, demonstrating the API's robust error-handling mechanism for invalid input formats.</li>
 </ul>
 </li>

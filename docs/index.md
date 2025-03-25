@@ -129,13 +129,19 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
         * Used io and base64 for encoding and handling image outputs.
     * **Defining File Paths**
         * Specified the MODELS_PATH and PARAMETERS_PATH to locate the pre-trained survival model and related parameters.
-    * **Loading the Pre-Trained Survival Model**
+        * Specified the DATASETS_PATH and PIPELINES_PATH to locate the data sets and preprocessing pipelines.
+    * **Loading the Training Data**
+        * Loaded the raw and preprocessed training data (X_train.csv, y_train and heart_failure_EDA.csv) using pd.read_csv.
+    * **Loading the Preprocessing Pipeline**
+        * Loaded the preprocessing pipeline (coxph_pipeline.pkl) involving a Yeo-Johnson transformer for numeric predictors using joblib.load.
+    * **Loading the Pre-Trained Survival Model**    
         * Loaded the pre-trained Cox Proportional Hazards (CoxPH) model (coxph_best_model.pkl) using joblib.load.
         * Handled potential errors during model loading with a try-except block.
     * **Loading Model Parameters**
         * Loaded the median values for numeric features (numeric_feature_median_list.pkl) to support feature binning.
         * Loaded the risk group threshold (coxph_best_model_risk_group_threshold.pkl) for categorizing patients into "High-Risk" and "Low-Risk" groups.
     * **Defining Input Schemas**
+        * Created a Pydantic BaseModel class to define input schema for TestCaseRequest: For individual test cases, expecting a dictionary of floats and integers as input features.
         * Created a Pydantic BaseModel class to define input schema for TestSample: For individual test cases, expecting a list of floats as input features.
         * Created a Pydantic BaseModel class to define input schema for TrainList: For batch processing, expecting a list of lists of floats as input features.
         * Created a Pydantic BaseModel class to define input schema for BinningRequest: For dichotomizing numeric features based on the median.
@@ -145,9 +151,15 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
     * **Defining API Endpoints**
         * Root Endpoint (/): A simple GET endpoint to validate API service connectivity.
         * Individual Survival Prediction Endpoint (/compute-individual-coxph-survival-probability-class/): A POST endpoint to generate survival profiles, estimate survival probabilities, and predict risk categories for individual test cases.
-        * Batch Survival Profile Endpoint (/compute-list-coxph-survival-profile/): A POST endpoint to generate survival profiles for a batch of cases.
-        * Feature Binning Endpoint (/bin-numeric-model-feature/): A POST endpoint to dichotomize numeric features based on the median.
-        * Kaplan-Meier Plot Endpoint (/plot-kaplan-meier/): A POST endpoint to generate and return Kaplan-Meier survival plots.
+        * Batch Survival Prediction Endpoint (/compute-list-coxph-survival-profile/): A POST endpoint to generate survival profiles for a batch of cases.
+        * Feature Binning Endpoint (/bin-numeric-model-feature/): A POST endpoint to dichotomize numeric features based on the median for a defined predictor.
+        * Kaplan-Meier Plot Endpoint (/plot-kaplan-meier/): A POST endpoint to generate and return Kaplan-Meier survival plots for a single defined predictor.
+        * Test Case Preprocessing Endpoint (/preprocess-test-case/): A POST endpoint to perform preprocessing for individual test cases.
+        * Kaplan-Meier Plot Grid Endpoint (/plot-kaplan-meier-grid/): A POST endpoint to generate and return Kaplan-Meier survival plots for all predictors.
+        * Cox Survival Plot Endpoint (/plot_coxph_survival_profile/): A POST endpoint to generate and return Cox survival plots.
+    * **Defining Utility Functions**
+        * Numeric Feature Binning Function (bin_numeric_feature): A utility function to dichotomize numeric features based on the median for any predictor.
+        * Kaplan-Meier Plot Profile Function (plot_kaplan_meier_profile): A utility function to generate and return Kaplan-Meier survival plots for any single predictor.
     * **Individual Survival Prediction Logic**
         * Converted the input data into a pandas DataFrame with appropriate feature names.
         * Used the pre-trained model’s predict_survival_function to generate the survival function for the test case.
@@ -167,6 +179,28 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
         * Plotted survival curves for different categories of the specified variable (e.g., "Low" vs. "High").
         * Included an optional new case value for comparison in the plot.
         * Saved the plot as a base64-encoded image and returned it in the API response.
+    * **Test Case Preprocessing Logic**
+        * Converted the input data into a pandas DataFrame.
+        * Applied Yeo-Johnson transformation (from a pre-defined pipeline) to normalize numeric features.
+        * Reconstructed the transformed DataFrame with appropriate feature names.
+        * Called the bin_numeric_feature utility function to binarize numeric features by creating dichotomous bins.
+        * Encoded categorical features as "Absent" or "Present" based on their values.
+        * Returned the preprocessed test case as a dictionary in a format suitable for model inference.
+    * **Kaplan-Meier Plot Grid Logic**
+        * Preprocessed the test case to binarize numeric features and encode categorical features.
+        * Created a 2x3 grid of plots (one per predictor).
+        * Called the plot_kaplan_meier_profile utility function to generate baseline survival curves for each predictor.
+        * Overlaid the Kaplan-Meier survival curve of the test case for direct comparison.
+        * Encoded the final plot as a base64 string for easy transmission in API responses.
+    * **Cox Survival Plot Logic**
+        * Predicted survival functions for both the training dataset and the individual test case using the final Cox Proportional Hazards model.
+        * Classified the test case as "High-Risk" or "Low-Risk" based on the model’s predicted risk score and predefined threshold.
+        * Interpolated survival probabilities at predefined time points (50, 100, 150, 200, 250 days).
+        * Overlaid the survival function for the test case, using different colors and line styles based on the predicted risk category:
+          * Low-Risk: Blue (solid for baseline, dotted for overlay).
+          * High-Risk: Red (solid for baseline, dotted for overlay).
+        * Added vertical lines to indicate estimated survival probabilities at specific time points.
+        * Saved the plot as a base64-encoded image and returned it in the API response.
     * **Error Handling**
         * Implemented robust error handling for invalid inputs or prediction errors using HTTPException.
         * Returned meaningful error messages and appropriate HTTP status codes (e.g., 500 for server errors).
@@ -174,8 +208,8 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
         * Used uvicorn to run the FastAPI app on localhost at port 8001.
 2. Key features of the API code included the following:
     * Supported both individual and batch predictions, making the API versatile for different use cases.
-    * Provided survival probabilities, risk categories, and visualizations (Kaplan-Meier plots) for interpretable results.
-    * Enabled feature binning for categorical analysis of numeric features.
+    * Provided survival probabilities, risk categories, and visualizations (Kaplan-Meier and Cox Survival plots) for interpretable results.
+    * Enabled feature preprocessing to transform the test case in a format suitable for model inference
 
 
 ### 1.2.2 API Testing <a class="anchor" id="1.2.2"></a>
@@ -190,6 +224,9 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
     * **Batch Survival Profile Request (POST /compute-list-coxph-survival-profile/)**: The API successfully processed a POST request for batch survival profile computation, returning 200 OK, confirming that multiple test cases were handled correctly.
     * **Feature Binning Request (POST /bin-numeric-model-feature/)**: A POST request was successfully executed, returning 200 OK, confirming that the API correctly categorized numeric model features into dichotomous bins.
     * **Kaplan-Meier Plot Request (POST /plot-kaplan-meier/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot was generated and returned as a base64-encoded image.
+    * **Test Case Preprocessing Request (POST /preprocess-test-case/)**: The API successfully processed a POST request, returning 200 OK, indicating that an individual test cases was completed preprocessing and transformed to a format suitable for model inference.
+    * **Kaplan-Meier Plot Grid Request (POST /plot-kaplan-meier-grid/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot for the individual the test case in direct comparison with the baseline survival curves for each predictor was generated and returned as a base64-encoded image.
+    * **Cox Survival Plot Request (POST /plot_coxph_survival_profile/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Cox survival plot for the individual the test case in direct comparison with the baseline survival curves for all the training cases categorized by risk categories was generated and returned as a base64-encoded image.
     * **Invalid Input Handling (POST /compute-individual-coxph-survival-probability-class/)**: A malformed or incorrectly structured request resulted in a 422 Unprocessable Entity response, demonstrating the API's robust error-handling mechanism for invalid input formats.
 
 
