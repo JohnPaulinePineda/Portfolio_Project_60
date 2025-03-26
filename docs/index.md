@@ -150,7 +150,7 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
         * Created a FastAPI instance (app) to define and serve API endpoints.
     * **Defining API Endpoints**
         * Root Endpoint (/): A simple GET endpoint to validate API service connectivity.
-        * Individual Survival Prediction Endpoint (/compute-individual-coxph-survival-probability-class/): A POST endpoint to generate survival profiles, estimate survival probabilities, and predict risk categories for individual test cases.
+        * Individual Survival Prediction Endpoint (/compute-individual-coxph-survival-probability-class/ and /compute-test-coxph-survival-probability-class/): POST endpoints to generate survival profiles, estimate survival probabilities, and predict risk categories for individual test cases with varying Pydantic BaseModel classes.
         * Batch Survival Prediction Endpoint (/compute-list-coxph-survival-profile/): A POST endpoint to generate survival profiles for a batch of cases.
         * Feature Binning Endpoint (/bin-numeric-model-feature/): A POST endpoint to dichotomize numeric features based on the median for a defined predictor.
         * Kaplan-Meier Plot Endpoint (/plot-kaplan-meier/): A POST endpoint to generate and return Kaplan-Meier survival plots for a single defined predictor.
@@ -211,6 +211,8 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
     * Provided survival probabilities, risk categories, and visualizations (Kaplan-Meier and Cox Survival plots) for interpretable results.
     * Enabled feature preprocessing to transform the test case in a format suitable for model inference
 
+
+![sp_fastapi_code.png](6ef14718-5ebc-44cb-9e48-aa8845935f9b.png)
 
 ### 1.2.2 API Testing <a class="anchor" id="1.2.2"></a>
 
@@ -815,7 +817,7 @@ else:
 
 
     
-![png](output_30_0.png)
+![png](output_31_0.png)
     
 
 
@@ -870,7 +872,7 @@ else:
 
 
     
-![png](output_32_0.png)
+![png](output_33_0.png)
     
 
 
@@ -1025,7 +1027,7 @@ else:
 
 
     
-![png](output_34_0.png)
+![png](output_35_0.png)
     
 
 
