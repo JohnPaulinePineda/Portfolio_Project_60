@@ -497,7 +497,7 @@ def plot_kaplan_meier_grid(test_case: TestCaseRequest):
 # for an individual test case
 # against the training data as baseline
 ##################################
-@app.post("/plot_coxph_survival_profile/")
+@app.post("/plot-coxph-survival-profile/")
 def plot_coxph_survival_profile(test_case: TestCaseRequest):
     try:
         # Getting the survival functions for training data cases
