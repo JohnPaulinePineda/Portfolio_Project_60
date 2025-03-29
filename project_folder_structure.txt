@@ -1,0 +1,27 @@
+Portfolio_Project_60/
+│── models/													# Stores trained models
+│   ├── coxph_best_model.pkl                          # Serialized ML model
+│── datasets/                                			# Stores raw and processed datasets
+│   ├── heart_failure_EDA.csv    						  # Processed dataset
+│   ├── X_train.csv    									  # Training dataset - predictor variables
+│   ├── y_train.csv                						  # Training dataset - response variables
+│── parameters/                    						# Stores code parameters
+│   ├── coxph_best_model_risk_group_threshold.pkl	  # Risk group threshold
+│   ├── numeric_feature_median_list.pkl 				  # Numeric feature median
+│── pipelines/    											# Stores model processing pipelines
+│   ├── coxph_pipeline.pkl   							  # Serialized ML model pipeline
+│── apis/                     							# FastAPI backend
+│   ├── survival_prediction_fastapi.py                # FastAPI app with endpoints
+│── uis/                									# Streamlit UI
+│   ├── streamlit_app.py               				  # Streamlit interface
+│── codes/               									# Stores Jupyter notebook
+│   ├── summary.ipynb            						  # Jupyter notebook for presenting project summary
+│── docs/               									# Stores GitHub pages files
+│   ├── doc.css            								  # CSS file for HTML formatting
+│   ├── index.html            							  # HTML-converted Jupyter notebook for presenting project summary
+│   ├── index.md            								  # Markdown-converted Jupyter notebook for presenting project summary
+│── images/               								# Stores supporting images
+│   ├── sp_data_background.png      					  # Image on data background
+│   ├── sp_model_background.png      					  # Image on model background
+│   ├── sp_deployment_background.png      			  # Image on model deployment background
+│── requirements.txt   									# Dependencies for the overall application
