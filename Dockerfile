@@ -4,6 +4,9 @@ FROM python:3.12.5
 # Set the working directory inside the container
 WORKDIR /app
 
+# Install Git inside the container
+RUN apt-get update && apt-get install -y git
+
 # Copy only necessary application files into the container
 COPY apis/requirements.txt /app/requirements.txt
 
@@ -17,9 +20,6 @@ COPY models /app/models
 COPY datasets /app/datasets
 COPY pipelines /app/pipelines
 COPY parameters /app/parameters
-
-# Set environment variables for efficiency
-ENV PYTHONUNBUFFERED=1
 
 # Expose FastAPI application port
 EXPOSE 8001
