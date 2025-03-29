@@ -28,7 +28,7 @@ PIPELINES_PATH = r"pipelines"
 # Loading the original training predictor data
 ##################################
 try:
-    X_train = pd.read_csv(os.path.join("..", DATASETS_PATH, "X_train.csv"), index_col=0)
+    X_train = pd.read_csv(os.path.join("/app", DATASETS_PATH, "X_train.csv"), index_col=0)
 except Exception as e:
     raise RuntimeError(f"Error loading original training predictor data: {str(e)}")
 
@@ -36,7 +36,7 @@ except Exception as e:
 # Loading the original training response data
 ##################################
 try:
-    y_train = pd.read_csv(os.path.join("..", DATASETS_PATH, "y_train.csv"), index_col=0)
+    y_train = pd.read_csv(os.path.join("/app", DATASETS_PATH, "y_train.csv"), index_col=0)
 except Exception as e:
     raise RuntimeError(f"Error loading original response training data: {str(e)}")
 
@@ -44,7 +44,7 @@ except Exception as e:
 # Loading the original preprocessed training data
 ##################################
 try:
-    x_original_EDA = pd.read_csv(os.path.join("..", DATASETS_PATH, "heart_failure_EDA.csv"), index_col=0)
+    x_original_EDA = pd.read_csv(os.path.join("/app", DATASETS_PATH, "heart_failure_EDA.csv"), index_col=0)
 except Exception as e:
     raise RuntimeError(f"Error loading original preprocessed training data: {str(e)}")
 
@@ -52,7 +52,7 @@ except Exception as e:
 # Loading the model preprocessing pipeline
 ##################################
 try:
-    coxph_pipeline = joblib.load(os.path.join("..", PIPELINES_PATH, "coxph_pipeline.pkl"))
+    coxph_pipeline = joblib.load(os.path.join("/app", PIPELINES_PATH, "coxph_pipeline.pkl"))
 except Exception as e:
     raise RuntimeError(f"Error loading model processing pipeline: {str(e)}")
 
@@ -60,7 +60,7 @@ except Exception as e:
 # Loading the model
 ##################################
 try:
-    final_survival_prediction_model = joblib.load(os.path.join("..", MODELS_PATH, "coxph_best_model.pkl"))
+    final_survival_prediction_model = joblib.load(os.path.join("/app", MODELS_PATH, "coxph_best_model.pkl"))
 except Exception as e:
     raise RuntimeError(f"Error loading model: {str(e)}")
 
@@ -68,7 +68,7 @@ except Exception as e:
 # Loading the median parameter
 ##################################
 try:
-    numeric_feature_median = joblib.load(os.path.join("..", PARAMETERS_PATH, "numeric_feature_median_list.pkl"))
+    numeric_feature_median = joblib.load(os.path.join("/app", PARAMETERS_PATH, "numeric_feature_median_list.pkl"))
 except Exception as e:
     raise RuntimeError(f"Error loading model feature median: {str(e)}")
 
@@ -76,7 +76,7 @@ except Exception as e:
 # Loading the threshold parameter
 ##################################
 try:
-    final_survival_prediction_model_risk_group_threshold = joblib.load(os.path.join("..", PARAMETERS_PATH, "coxph_best_model_risk_group_threshold.pkl"))
+    final_survival_prediction_model_risk_group_threshold = joblib.load(os.path.join("/app", PARAMETERS_PATH, "coxph_best_model_risk_group_threshold.pkl"))
 except Exception as e:
     raise RuntimeError(f"Error loading model risk group threshold: {str(e)}")
 
