@@ -18,6 +18,7 @@
         * [1.3.1 Docker File Creation](#1.3.1)
         * [1.3.2 Docker Image Building](#1.3.2)
         * [1.3.3 Docker Image Testing](#1.3.3)
+        * [1.3.4 Docker Image Hosting](#1.3.4)
     * [1.4 Application Programming Interface (API) Deployment](#1.4)
         * [1.4.1 API Container Hosting](#1.4.1)
     * [1.5 User Interface (UI) Development](#1.5)
@@ -1037,7 +1038,7 @@ else:
 
 ![sp_fastapi_docker_file_creation.png](9b7fee0d-0fe8-424b-a946-d83019c020ff.png)
 
-![sp_fastapi_docker_code.png](1a31e63f-207f-473c-94d4-347675743af3.png)
+![sp_fastapi_docker_code.png](6c889374-4e2e-4d8c-bfc9-7b61106e7d98.png)
 
 ### 1.3.2 Docker Image Building <a class="anchor" id="1.3.2"></a>
 
@@ -1726,13 +1727,27 @@ else:
     
 
 
+### 1.3.4 Docker Image Hosting <a class="anchor" id="1.3.4"></a>
+
+![sp_fastapi_docker_image_dockerhub_upload.png](673988f5-5e9b-45e8-8741-1e5d4585cbf2.png)
+
+![sp_fastapi_docker_image_dockerhub_upload_status.png](5ad121f9-f188-48ef-a080-3e1357df8f31.png)
+
 ## 1.4. Application Programming Interface (API) Deployment <a class="anchor" id="1.4"></a>
 
 ### 1.4.1 API Container Hosting <a class="anchor" id="1.4.1"></a>
 
+![sp_fastapi_docker_image_render_hosting.png](88ff1f46-e894-4b80-a952-cfac07f8071e.png)
+
+![sp_fastapi_render_documentation_endpoints.png](66a44b6b-c6f4-4a9a-99a5-7623d173ee9f.png)
+
+![sp_fastapi_render_schema_endpoints.png](4b571faf-14b7-4763-bafc-2d307925b0f4.png)
+
 ## 1.5. User Interface (UI) Development <a class="anchor" id="1.5"></a>
 
 ### 1.5.1 UI Building With API Calls <a class="anchor" id="1.5.1"></a>
+
+![sp_streamlit_code.png](98701bfb-f34c-4ef9-a975-8fca643e0da6.png)
 
 ## 1.6. Web Application Deployment <a class="anchor" id="1.6"></a>
 

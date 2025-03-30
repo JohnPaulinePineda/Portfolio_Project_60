@@ -10,7 +10,7 @@ from io import BytesIO
 ##################################
 # Defining FastAPI endpoint URL
 ##################################
-SP_FASTAPI_BASE_URL = "http://127.0.0.1:8001"
+SP_FASTAPI_RENDER_URL = "https://heart-failure-survival-probability.onrender.com"
 
 ##################################
 # Setting the page layout to wide
@@ -42,7 +42,7 @@ st.markdown("<h1 style='text-align: center;'>Heart Failure Survival Probability 
 # Providing a description for the application
 ##################################
 st.markdown("""---""")
-st.markdown("<h5 style='font-size: 20px;'>This model evaluates the heart failure survival risk of a test case based on certain cardiovascular, hematologic and metabolic markers. Pass the appropriate details below to visually assess your characteristics against the study population, plot your survival probability profile, estimate your heart failure survival probabilities at different time points, and determine your risk category. For more information on the complete model development process, you may refer to this <a href='https://johnpaulinepineda.github.io/Portfolio_Project_55/' style='font-weight: bold;'>Jupyter Notebook</a>. Additionally, all associated datasets and code files can be accessed from this <a href='https://github.com/JohnPaulinePineda/Portfolio_Project_55' style='font-weight: bold;'>GitHub Project Repository</a>.</h5>", unsafe_allow_html=True)
+st.markdown("<h5 style='font-size: 20px;'>This model evaluates the heart failure survival risk of a test case based on certain cardiovascular, hematologic and metabolic markers. Pass the appropriate details below to visually assess your characteristics against the study population, plot your survival probability profile, estimate your heart failure survival probabilities at different time points, and determine your risk category. For more information on the complete model development process, you may refer to this <a href='https://johnpaulinepineda.github.io/Portfolio_Project_55/' style='font-weight: bold;'>Jupyter Notebook</a>. Additionally, all associated datasets and code files can be accessed from this <a href='https://github.com/JohnPaulinePineda/Portfolio_Project_55' style='font-weight: bold;'>GitHub Project Repository</a>. A supplemental <a href='https://johnpaulinepineda.github.io/Portfolio_Project_60/' style='font-weight: bold;'>Jupyter Notebook</a> details the containerization and deployment of the model API endpoints on open-source platforms.</h5>", unsafe_allow_html=True)
 
 ##################################
 # Creating a section for 
@@ -139,7 +139,7 @@ if entered:
     ##################################
     # Sending a plot-coxph-survival-profile request to FastAPI
     ##################################
-    response = requests.post(f"{SP_FASTAPI_BASE_URL}/plot-kaplan-meier-grid/", json=test_case_request)
+    response = requests.post(f"{SP_FASTAPI_RENDER_URL}/plot-kaplan-meier-grid/", json=test_case_request)
     
     if response.status_code == 200:
         plot_data = response.json()["plot"]
@@ -160,7 +160,7 @@ if entered:
     ##################################
     # Sending a plot-coxph-survival-profile request to FastAPI
     ##################################
-    response = requests.post(f"{SP_FASTAPI_BASE_URL}/plot-coxph-survival-profile/", json=test_case_request)
+    response = requests.post(f"{SP_FASTAPI_RENDER_URL}/plot-coxph-survival-profile/", json=test_case_request)
     
     if response.status_code == 200:
         plot_data = response.json()["plot"]
@@ -181,7 +181,7 @@ if entered:
     ##################################
     # Sending a compute-test-coxph-survival-probability-class request to FastAPI
     ##################################
-    response = requests.post(f"{SP_FASTAPI_BASE_URL}/compute-test-coxph-survival-probability-class/", json=test_case_request)
+    response = requests.post(f"{SP_FASTAPI_RENDER_URL}/compute-test-coxph-survival-probability-class/", json=test_case_request)
     
     if response.status_code == 200:
         result = response.json()

@@ -10,7 +10,9 @@ Portfolio_Project_60/
 │   ├── numeric_feature_median_list.pkl 				  # Numeric feature median
 │── pipelines/    											# Stores model processing pipelines
 │   ├── coxph_pipeline.pkl   							  # Serialized ML model pipeline
-│── apis/                     							# FastAPI backend
+│── apis/                     							# FastAPI backend for Docker
+│   ├── survival_prediction_fastapi.py                # FastAPI app with endpoints
+│── test_apis/                     						# FastAPI backend for Local Testing
 │   ├── survival_prediction_fastapi.py                # FastAPI app with endpoints
 │── uis/                									# Streamlit UI
 │   ├── streamlit_app.py               				  # Streamlit interface
