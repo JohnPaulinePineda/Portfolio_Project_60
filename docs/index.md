@@ -206,7 +206,7 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
         * Implemented robust error handling for invalid inputs or prediction errors using HTTPException.
         * Returned meaningful error messages and appropriate HTTP status codes (e.g., 500 for server errors).
     * **Running the FastAPI App**
-        * Used uvicorn to run the FastAPI app on localhost at port 8001.
+        * Used uvicorn to run the FastAPI app on localhost at port 8000.
 2. Key features of the API code included the following:
     * Supported both individual and batch predictions, making the API versatile for different use cases.
     * Provided survival probabilities, risk categories, and visualizations (Kaplan-Meier and Cox Survival plots) for interpretable results.
@@ -230,12 +230,11 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
     * **Test Case Preprocessing Request (POST /preprocess-test-case/)**: The API successfully processed a POST request, returning 200 OK, indicating that an individual test cases was completed preprocessing and transformed to a format suitable for model inference.
     * **Kaplan-Meier Plot Grid Request (POST /plot-kaplan-meier-grid/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot for the individual the test case in direct comparison with the baseline survival curves for each predictor was generated and returned as a base64-encoded image.
     * **Cox Survival Plot Request (POST /plot_coxph_survival_profile/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Cox survival plot for the individual the test case in direct comparison with the baseline survival curves for all the training cases categorized by risk categories was generated and returned as a base64-encoded image.
-    * **Invalid Input Handling (POST /compute-individual-coxph-survival-probability-class/)**: A malformed or incorrectly structured request resulted in a 422 Unprocessable Entity response, demonstrating the API's robust error-handling mechanism for invalid input formats.
 
 
 ![sp_fastapi_activation.png](7c2c24f8-ba6f-4a39-9fad-8289e588900b.png)
 
-![sp_fastapi_documentation_endpoints.png](d0395784-b162-4479-99fb-0ac2c4d5bc84.png)
+![sp_fastapi_documentation_endpoints.png](6de7e96a-69db-49f1-a932-9d0d3a96f88b.png)
 
 ![sp_fastapi_documentation_schemas.png](563f92ce-5815-4391-b6c3-d3a5a0284c73.png)
 
@@ -1036,15 +1035,63 @@ else:
 
 ### 1.3.1 Docker File Creation <a class="anchor" id="1.3.1"></a>
 
+1. A Dockerfile was created to containerize the FastAPI survival prediction application with the following steps:
+    * **Base Image Selection**
+        * Used the official Python 3.12.5 image as the base environment.
+    * **Setting Up the Working Directory**
+        * Defined `/app` as the working directory inside the container.
+    * **Installing System Dependencies**
+        * Updated package lists and installed Git for version control inside the container.
+    * **Copying Required Files**
+        * Copied requirements.txt into the container for dependency installation.
+        * Copied essential application directories (apis, models, datasets, pipelines, parameters) into the container.
+    * **Installing Python Dependencies**
+        * Upgraded pip and installed the required Python libraries listed in requirements.txt using `pip install --no-cache-dir`.
+    * **Exposing Application Port**
+        * Configured port 8001 to allow external access to the FastAPI application.
+    * **Defining the Container Startup Command**
+        * Set the default command to run uvicorn, launching the FastAPI app (`apis.survival_prediction_fastapi:app`) on 0.0.0.0:8001.
+
+
 ![sp_fastapi_docker_file_creation.png](9b7fee0d-0fe8-424b-a946-d83019c020ff.png)
+
+
+2. In order for the Docker container to locate the essential application directories (apis, models, datasets, pipelines, parameters) within itself when running the application, the FastAPI code was modified to utilize an absolute path to the  `/app` working directory inside the container, instead of the relative path as what was previously used.
+3. The localhost port was changed from 8000 to 8001 to run the containerized FastAPI app using uvicorn.
+   
 
 ![sp_fastapi_docker_code.png](6c889374-4e2e-4d8c-bfc9-7b61106e7d98.png)
 
 ### 1.3.2 Docker Image Building <a class="anchor" id="1.3.2"></a>
 
+1. The Docker image was built with the following steps:
+    * **Building the Docker Image**
+        * Used `docker build -t survival-prediction-fastapi-app .` to create a Docker image named survival-prediction-fastapi-app from the Dockerfile in the current directory.
+
+
 ![sp_fastapi_docker_image_building.png](2c4f25a8-addd-4372-8c73-c66e0a17e6f7.png)
 
 ### 1.3.3 Docker Image Testing <a class="anchor" id="1.3.3"></a>
+
+1. The Docker image was tested locally with the following steps:
+    * **Testing the Container Locally**
+        * Used `docker run -p 8001:8001 survival-prediction-fastapi-app` to start a container, mapping port 8001 on the host machine to port 8001 inside the container.
+        * Verified that the FastAPI application was running correctly.
+2. The containerized FastAPI application was verified to be running correctly by replicating the previous test sequence with results presented as follows:
+    * **Server Initialization**: FastAPI application was started successfully, with Uvicorn running on http://localhost:8001, indicating that the server and its documentation are active and ready to process requests.
+    * **Root Endpoint Accessed (GET /)**: The API received a GET request at the root endpoint and responded with 200 OK, confirming that the service is running and accessible.
+    * **Individual Survival Probability Request (POST /compute-individual-coxph-survival-probability-class/)**: A POST request was processed successfully, returning 200 OK, indicating that the API correctly computed survival probabilities and risk categorization for an individual test case.
+    * **Batch Survival Profile Request (POST /compute-list-coxph-survival-profile/)**: The API successfully processed a POST request for batch survival profile computation, returning 200 OK, confirming that multiple test cases were handled correctly.
+    * **Feature Binning Request (POST /bin-numeric-model-feature/)**: A POST request was successfully executed, returning 200 OK, confirming that the API correctly categorized numeric model features into dichotomous bins.
+    * **Kaplan-Meier Plot Request (POST /plot-kaplan-meier/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot was generated and returned as a base64-encoded image.
+    * **Test Case Preprocessing Request (POST /preprocess-test-case/)**: The API successfully processed a POST request, returning 200 OK, indicating that an individual test cases was completed preprocessing and transformed to a format suitable for model inference.
+    * **Kaplan-Meier Plot Grid Request (POST /plot-kaplan-meier-grid/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot for the individual the test case in direct comparison with the baseline survival curves for each predictor was generated and returned as a base64-encoded image.
+    * **Cox Survival Plot Request (POST /plot_coxph_survival_profile/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Cox survival plot for the individual the test case in direct comparison with the baseline survival curves for all the training cases categorized by risk categories was generated and returned as a base64-encoded image.
+    * 
+
+![sp_fastapi_docker_documentation_endpoints.png](67fa7a89-163b-4541-9538-edef3dba07bf.png)
+
+![sp_fastapi_render_schema_endpoints.png](585c424a-c9df-4b20-ab04-597e1c2f9a44.png)
 
 ![sp_fastapi_docker_activation_endpoints.png](8187212d-c023-4be8-8ccb-59f5f53a728d.png)
 
@@ -1513,7 +1560,7 @@ else:
 
 
     
-![png](output_49_0.png)
+![png](output_54_0.png)
     
 
 
@@ -1568,7 +1615,7 @@ else:
 
 
     
-![png](output_51_0.png)
+![png](output_56_0.png)
     
 
 
@@ -1723,11 +1770,22 @@ else:
 
 
     
-![png](output_53_0.png)
+![png](output_58_0.png)
     
 
 
 ### 1.3.4 Docker Image Hosting <a class="anchor" id="1.3.4"></a>
+
+1. The Docker image was pushed to DockerHub to ensure persistent storage with the following steps:
+    * **Authenticating with DockerHub**
+        * Logged into DockerHub using `docker login` to enable pushing images to a remote repository.
+    * **Tagging the Docker Image**
+        * Used `docker tag survival-prediction-fastapi-app johnpaulinepineda/survival-prediction-fastapi-app:latest` to assign a repository name and version (latest) to the image for DockerHub.   
+    * **Pushing the Image to DockerHub**
+        * Used `docker push johnpaulinepineda/survival-prediction-fastapi-app:latest` to upload the tagged image to DockerHub, making it available for deployment on external platforms.
+    * **Verifying DockerHub Image Upload Completion**
+        * Confirmed the successful uploading of the `johnpaulinepineda/survival-prediction-fastapi-app` image to the repository under the `johnpaulinepineda` DockerHub namespace.
+
 
 ![sp_fastapi_docker_image_dockerhub_upload.png](673988f5-5e9b-45e8-8741-1e5d4585cbf2.png)
 
@@ -1752,6 +1810,12 @@ else:
 ## 1.6. Web Application Deployment <a class="anchor" id="1.6"></a>
 
 ### 1.6.1 UI Hosting <a class="anchor" id="1.6.1"></a>
+
+![sp_fastapi_render_service.png](e08a109e-ca39-4e8d-89d7-5effce44eb21.png)
+
+![sp_streamlit_render_service.png](d76713d4-4173-4387-9f01-4270b0e3109f.png)
+
+![sp_application_render_service.png](bb50ebe0-785b-40d3-8746-c6387e2c4aff.png)
 
 ## 1.7. Consolidated Findings <a class="anchor" id="1.7"></a>
 
