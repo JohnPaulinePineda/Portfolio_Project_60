@@ -14,17 +14,18 @@
     * [1.2 Application Programming Interface (API) Development](#1.2)
         * [1.2.1 API Building](#1.2.1)
         * [1.2.2 API Testing](#1.2.2)
-    * [1.3 Application Containerization](#1.3)
+    * [1.3 Application Programming Interface (API) Containerization](#1.3)
         * [1.3.1 Docker File Creation](#1.3.1)
         * [1.3.2 Docker Image Building](#1.3.2)
         * [1.3.3 Docker Image Testing](#1.3.3)
-        * [1.3.4 Docker Image Hosting](#1.3.4)
+        * [1.3.4 Docker Image Storage](#1.3.4)
     * [1.4 Application Programming Interface (API) Deployment](#1.4)
-        * [1.4.1 API Container Hosting](#1.4.1)
+        * [1.4.1 Docker Image Execution and Hosting](#1.4.1)
     * [1.5 User Interface (UI) Development](#1.5)
         * [1.5.1 UI Building With API Calls](#1.5.1)
     * [1.6 Web Application Deployment](#1.6)
         * [1.6.1 UI Hosting](#1.6.1)
+        * [1.6.1 Applicaton Testing](#1.6.2)
     * [1.7 Consolidated Findings](#1.7)
 * [**2. Summary**](#Summary)   
 * [**3. References**](#References)
@@ -109,7 +110,7 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
 3. The user interface ouput consists of the following:
     * Kaplan-Meier plots to:
         * provide a baseline visualization of the survival profiles of the various feature categories (Yes | No or High | Low) estimated from the study population given the survival time and event status
-        * Indicate the entries made from the user input to visually assess the survival probabilities of the test case characteristics against the study population across all time points
+        * indicate the entries made from the user input to visually assess the survival probabilities of the test case characteristics against the study population across all time points
     * survival probability plot to:
         * provide a visualization of the baseline survival probability profile using each observation of the study population given the survival time and event status
         * indicate the heart failure survival probabilities of the test case at different time points
@@ -125,12 +126,12 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
 
 1. An API code using the FastAPI framework was developed for deploying a survival prediction model with the steps described as follows:
     * **Loading Python Libraries**
-        * Imported necessary libraries such as FastAPI, HTTPException, and BaseModel for API development.
-        * Included libraries for survival analysis (sksurv, lifelines), data manipulation (numpy, pandas), and visualization (matplotlib).
-        * Used io and base64 for encoding and handling image outputs.
+        * Imported necessary libraries such as `FastAPI`, `HTTPException`, and `BaseModel` for API development.
+        * Included libraries for survival analysis (`sksurv`, `lifelines`), data manipulation (`numpy`, `pandas`), and visualization (`matplotlib`).
+        * Used `io` and `base64` for encoding and handling image outputs.
     * **Defining File Paths**
-        * Specified the MODELS_PATH and PARAMETERS_PATH to locate the pre-trained survival model and related parameters.
-        * Specified the DATASETS_PATH and PIPELINES_PATH to locate the data sets and preprocessing pipelines.
+        * Specified the `MODELS_PATH` and `PARAMETERS_PATH` to locate the pre-trained survival model and related parameters.
+        * Specified the `DATASETS_PATH` and `PIPELINES_PATH` to locate the data sets and preprocessing pipelines.
     * **Loading the Training Data**
         * Loaded the raw and preprocessed training data (X_train.csv, y_train and heart_failure_EDA.csv) using pd.read_csv.
     * **Loading the Preprocessing Pipeline**
@@ -150,17 +151,17 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
     * **Initializing the FastAPI App**
         * Created a FastAPI instance (app) to define and serve API endpoints.
     * **Defining API Endpoints**
-        * Root Endpoint (/): A simple GET endpoint to validate API service connectivity.
-        * Individual Survival Prediction Endpoint (/compute-individual-coxph-survival-probability-class/ and /compute-test-coxph-survival-probability-class/): POST endpoints to generate survival profiles, estimate survival probabilities, and predict risk categories for individual test cases with varying Pydantic BaseModel classes.
-        * Batch Survival Prediction Endpoint (/compute-list-coxph-survival-profile/): A POST endpoint to generate survival profiles for a batch of cases.
-        * Feature Binning Endpoint (/bin-numeric-model-feature/): A POST endpoint to dichotomize numeric features based on the median for a defined predictor.
-        * Kaplan-Meier Plot Endpoint (/plot-kaplan-meier/): A POST endpoint to generate and return Kaplan-Meier survival plots for a single defined predictor.
-        * Test Case Preprocessing Endpoint (/preprocess-test-case/): A POST endpoint to perform preprocessing for individual test cases.
-        * Kaplan-Meier Plot Grid Endpoint (/plot-kaplan-meier-grid/): A POST endpoint to generate and return Kaplan-Meier survival plots for all predictors.
-        * Cox Survival Plot Endpoint (/plot_coxph_survival_profile/): A POST endpoint to generate and return Cox survival plots.
+        * Root Endpoint (`/`): A simple GET endpoint to validate API service connectivity.
+        * Individual Survival Prediction Endpoint (`/compute-individual-coxph-survival-probability-class/` and `/compute-test-coxph-survival-probability-class/`): POST endpoints to generate survival profiles, estimate survival probabilities, and predict risk categories for individual test cases with varying Pydantic BaseModel classes.
+        * Batch Survival Prediction Endpoint (`/compute-list-coxph-survival-profile/`): A POST endpoint to generate survival profiles for a batch of cases.
+        * Feature Binning Endpoint (`/bin-numeric-model-feature/`): A POST endpoint to dichotomize numeric features based on the median for a defined predictor.
+        * Kaplan-Meier Plot Endpoint (`/plot-kaplan-meier/`): A POST endpoint to generate and return Kaplan-Meier survival plots for a single defined predictor.
+        * Test Case Preprocessing Endpoint (`/preprocess-test-case/`): A POST endpoint to perform preprocessing for individual test cases.
+        * Kaplan-Meier Plot Grid Endpoint (`/plot-kaplan-meier-grid/`): A POST endpoint to generate and return Kaplan-Meier survival plots for all predictors.
+        * Cox Survival Plot Endpoint (`/plot_coxph_survival_profile/`): A POST endpoint to generate and return Cox survival plots.
     * **Defining Utility Functions**
-        * Numeric Feature Binning Function (bin_numeric_feature): A utility function to dichotomize numeric features based on the median for any predictor.
-        * Kaplan-Meier Plot Profile Function (plot_kaplan_meier_profile): A utility function to generate and return Kaplan-Meier survival plots for any single predictor.
+        * Numeric Feature Binning Function (`bin_numeric_feature`): A utility function to dichotomize numeric features based on the median for any predictor.
+        * Kaplan-Meier Plot Profile Function (`plot_kaplan_meier_profile`): A utility function to generate and return Kaplan-Meier survival plots for any single predictor.
     * **Individual Survival Prediction Logic**
         * Converted the input data into a pandas DataFrame with appropriate feature names.
         * Used the pre-trained model’s predict_survival_function to generate the survival function for the test case.
@@ -218,9 +219,9 @@ This project implements the **Cox Proportional Hazards Regression**, **Cox Net S
 ### 1.2.2 API Testing <a class="anchor" id="1.2.2"></a>
 
 1. The API code developed using the FastAPI framework deploying a survival prediction model was successfully tested with results presented as follows:
-    * **Server Initialization**: FastAPI application was started successfully, with Uvicorn running on http://127.0.0.1:8000, indicating that the server and its documentation are active and ready to process requests.
+    * **Server Initialization**: FastAPI application was started successfully, with Uvicorn running on `http://127.0.0.1:8000`, indicating that the server and its documentation are active and ready to process requests.
     * **Hot Reloading Activated**: Uvicorn's reloader process (WatchFiles) was initialized, allowing real-time code changes without restarting the server.
-    * **Server Process Started**: The primary server process was assigned a process ID (18676), confirming successful application launch.
+    * **Server Process Started**: The primary server process was assigned a process ID (25028), confirming successful application launch.
     * **Application Ready State**: The server was shown to wait for incoming requests, ensuring all necessary components, including model loading, are successfully initialized.
     * **Root Endpoint Accessed (GET /)**: The API received a GET request at the root endpoint and responded with 200 OK, confirming that the service is running and accessible.
     * **Individual Survival Probability Request (POST /compute-individual-coxph-survival-probability-class/)**: A POST request was processed successfully, returning 200 OK, indicating that the API correctly computed survival probabilities and risk categorization for an individual test case.
@@ -1066,7 +1067,7 @@ else:
 
 1. The Docker image was built with the following steps:
     * **Building the Docker Image**
-        * Used `docker build -t survival-prediction-fastapi-app .` to create a Docker image named survival-prediction-fastapi-app from the Dockerfile in the current directory.
+        * Used `docker build -t survival-prediction-fastapi-app .` to create a Docker image named `survival-prediction-fastapi-app` from the Dockerfile in the current directory.
 
 
 ![sp_fastapi_docker_image_building.png](2c4f25a8-addd-4372-8c73-c66e0a17e6f7.png)
@@ -1076,7 +1077,6 @@ else:
 1. The Docker image was tested locally with the following steps:
     * **Testing the Container Locally**
         * Used `docker run -p 8001:8001 survival-prediction-fastapi-app` to start a container, mapping port 8001 on the host machine to port 8001 inside the container.
-        * Verified that the FastAPI application was running correctly.
 2. The containerized FastAPI application was verified to be running correctly by replicating the previous test sequence with results presented as follows:
     * **Server Initialization**: FastAPI application was started successfully, with Uvicorn running on http://localhost:8001, indicating that the server and its documentation are active and ready to process requests.
     * **Root Endpoint Accessed (GET /)**: The API received a GET request at the root endpoint and responded with 200 OK, confirming that the service is running and accessible.
@@ -1087,7 +1087,7 @@ else:
     * **Test Case Preprocessing Request (POST /preprocess-test-case/)**: The API successfully processed a POST request, returning 200 OK, indicating that an individual test cases was completed preprocessing and transformed to a format suitable for model inference.
     * **Kaplan-Meier Plot Grid Request (POST /plot-kaplan-meier-grid/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Kaplan-Meier survival plot for the individual the test case in direct comparison with the baseline survival curves for each predictor was generated and returned as a base64-encoded image.
     * **Cox Survival Plot Request (POST /plot_coxph_survival_profile/)**: The API successfully processed a POST request, returning 200 OK, indicating that a Cox survival plot for the individual the test case in direct comparison with the baseline survival curves for all the training cases categorized by risk categories was generated and returned as a base64-encoded image.
-    * 
+   
 
 ![sp_fastapi_docker_documentation_endpoints.png](67fa7a89-163b-4541-9538-edef3dba07bf.png)
 
@@ -1774,7 +1774,7 @@ else:
     
 
 
-### 1.3.4 Docker Image Hosting <a class="anchor" id="1.3.4"></a>
+### 1.3.4 Docker Image Storage <a class="anchor" id="1.3.4"></a>
 
 1. The Docker image was pushed to DockerHub to ensure persistent storage with the following steps:
     * **Authenticating with DockerHub**
@@ -1793,7 +1793,25 @@ else:
 
 ## 1.4. Application Programming Interface (API) Deployment <a class="anchor" id="1.4"></a>
 
-### 1.4.1 API Container Hosting <a class="anchor" id="1.4.1"></a>
+### 1.4.1 Docker Image Execution and Hosting <a class="anchor" id="1.4.1"></a>
+
+1. The containerized FastAPI application was deployed on Render with the following steps:
+    * **Preparing the DockerHub Repository**
+        * Ensured the `survival-prediction-fastapi-app` image was available in the `johnpaulinepineda` DockerHub namespace.
+        * Made the repository public or granted Render access to a private repository.
+    * **Creating a New Web Service on Render**
+        * Selected `New` → `Web Service` in the Render dashboard.
+        * Chose `Deploy an existing image from a registry` and provided the Docker image name from DockerHub.
+    * **Configuring the Service**
+        * Named the service `heart-failure-survival-probability-estimation` and selected `Singapore` as the region.
+        * Chose the `Free instance` type for testing.
+        * Set the service to run on port 8001, matching the port exposed in the Dockerfile.
+        * Added an environment variable (`Key: PORT` and `Value: 8001`) under advanced settings.
+    * **Deploying and Testing the API**
+        * Render pulled the image from DockerHub and deployed the container.
+        * Accessed the API using the public Render URL.
+        * Verified the FastAPI endpoints via the interactive documentation at `/docs`.
+
 
 ![sp_fastapi_docker_image_render_hosting.png](88ff1f46-e894-4b80-a952-cfac07f8071e.png)
 
@@ -1805,15 +1823,62 @@ else:
 
 ### 1.5.1 UI Building With API Calls <a class="anchor" id="1.5.1"></a>
 
+1. A Streamlit UI was developed to interact with the FastAPI backend for heart failure survival prediction with the following steps:
+    * **Loading Python Libraries**
+        * Imported `streamlit` for UI development and `requests` for API communication.
+        * Used `base64`, `PIL`, and `io` for handling and displaying image outputs.
+    * **Defining the FastAPI Endpoint URL**
+        * Set `SP_FASTAPI_RENDER_URL` as the base URL for the FastAPI service deployed on Render.   
+    * **Setting the Page Layout**
+        * Configured the Streamlit page to a wide layout for better readability.
+    * **Defining Input Variables**
+        * Listed key cardiovascular, hematologic, and metabolic markers required for prediction.
+    * **Creating the UI Components**
+        * Displayed a title and description for the application, including links to the project documentation and GitHub repository.
+        * Used sliders for numeric inputs (e.g., Age, Ejection Fraction, Serum Creatinine, Serum Sodium).
+        * Used radio buttons for categorical features (e.g., Anaemia, High Blood Pressure).
+    * **Structuring User Input**
+        * Collected and formatted user responses into a dictionary to match the API request format.   
+    * **Defining the Prediction Button Action**
+        * Added an `Assess Characteristics Against Study Population + Plot Survival Probability Profile + Estimate Heart Failure Survival Probability + Predict Risk Category` button to trigger API requests. 
+    * **Sending API Requests & Displaying Results**
+        * Called the FastAPI `/plot-kaplan-meier-grid/` endpoint to visualize the test case against the study population.
+        * Called `/plot-coxph-survival-profile/` to generate the survival probability curve.
+        * Called `/compute-test-coxph-survival-probability-class/` to estimate survival probabilities at multiple time points and predict the risk category.
+    * **Displaying Model Predictions**
+        * Rendered probability estimates dynamically, coloring the text blue for low-risk and red for high-risk predictions.
+        * Used structured markdown to enhance readability and interpretation of results.
+
+
 ![sp_streamlit_code.png](98701bfb-f34c-4ef9-a975-8fca643e0da6.png)
 
 ## 1.6. Web Application Deployment <a class="anchor" id="1.6"></a>
 
 ### 1.6.1 UI Hosting <a class="anchor" id="1.6.1"></a>
 
-![sp_fastapi_render_service.png](e08a109e-ca39-4e8d-89d7-5effce44eb21.png)
+1. The containerized FastAPI application was deployed on Render with the following steps:
+    * **Preparing the GitHub Repository**
+        * Ensured the project repository was on GitHub and accessible to Render.
+        * Verified that `streamlit_app.py` and `requirements.txt` were inside the `uis/` directory.
+    * **Creating a New Web Service on Render**
+        * Logged into the Render Dashboard and selected `New` → `Web Service`.
+        * Connected the service to the GitHub repository and set `uis/` as the root directory in the advanced settings.
+    * **Configuring the Deployment**
+        * Defined the `Build Command` as `pip install -r requirements.txt` to install dependencies.
+        * Set the `Start Command` to run the Streamlit app on the assigned port.
+        * Chose `Python 3.12+` as the runtime environment and opted for the `Free Tier` instance type.
+    * **Deploying the Application**
+        * Clicked `Create Web Service` to begin the deployment process.
+        * Waited for Render to install dependencies and launch the application.
+        * As a requirement, activated the previously deployed FastAPI Docker image first via the public Render URL ([https://heart-failure-survival-probability.onrender.com/](https://heart-failure-survival-probability.onrender.com/))
+        * Accessed the deployed app via the public Render URL ([https://heart-failure-survival-estimation.onrender.com/](https://heart-failure-survival-estimation.onrender.com/))
 
-![sp_streamlit_render_service.png](d76713d4-4173-4387-9f01-4270b0e3109f.png)
+
+![sp_fastapi_render_service.png](5dd5a14f-723d-4171-84a6-29b4207c2e32.png)
+
+![sp_streamlit_render_service.png](ef15c655-62c1-4547-bbb6-bc82de90294e.png)
+
+### 1.6.2 Application Testing <a class="anchor" id="1.6.2"></a>
 
 ![sp_application_render_service.png](bb50ebe0-785b-40d3-8746-c6387e2c4aff.png)
 
