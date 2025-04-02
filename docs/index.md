@@ -1784,7 +1784,7 @@ else:
     * **Pushing the Image to DockerHub**
         * Used `docker push johnpaulinepineda/survival-prediction-fastapi-app:latest` to upload the tagged image to DockerHub, making it available for deployment on external platforms.
     * **Verifying DockerHub Image Upload Completion**
-        * Confirmed the successful uploading of the `johnpaulinepineda/survival-prediction-fastapi-app` image to the repository under the `johnpaulinepineda` DockerHub namespace.
+        * Confirmed the successful transfer of the `johnpaulinepineda/survival-prediction-fastapi-app` image to the repository under the `johnpaulinepineda` DockerHub namespace.
 
 
 ![sp_fastapi_docker_image_dockerhub_upload.png](673988f5-5e9b-45e8-8741-1e5d4585cbf2.png)
@@ -1840,7 +1840,7 @@ else:
     * **Structuring User Input**
         * Collected and formatted user responses into a dictionary to match the API request format.   
     * **Defining the Prediction Button Action**
-        * Added an `Assess Characteristics Against Study Population + Plot Survival Probability Profile + Estimate Heart Failure Survival Probability + Predict Risk Category` button to trigger API requests. 
+        * Added an `Assess Characteristics Against Study Population + Plot Survival Probability Profile + Estimate Heart Failure Survival Probability + Predict Risk Category` action button to trigger API requests. 
     * **Sending API Requests & Displaying Results**
         * Called the FastAPI `/plot-kaplan-meier-grid/` endpoint to visualize the test case against the study population.
         * Called `/plot-coxph-survival-profile/` to generate the survival probability curve.
@@ -1870,8 +1870,8 @@ else:
     * **Deploying the Application**
         * Clicked `Create Web Service` to begin the deployment process.
         * Waited for Render to install dependencies and launch the application.
-        * As a requirement, activated the previously deployed FastAPI Docker image first via the public Render URL ([https://heart-failure-survival-probability.onrender.com/](https://heart-failure-survival-probability.onrender.com/))
-        * Accessed the deployed app via the public Render URL ([https://heart-failure-survival-estimation.onrender.com/](https://heart-failure-survival-estimation.onrender.com/))
+        * As a requirement, activated the previously deployed FastAPI Docker image first via the public Render URL ([https://heart-failure-survival-probability.onrender.com/](https://heart-failure-survival-probability.onrender.com/)).
+        * Accessed the deployed app via the public Render URL ([https://heart-failure-survival-estimation.onrender.com/](https://heart-failure-survival-estimation.onrender.com/)).
 
 
 ![sp_fastapi_render_service.png](5dd5a14f-723d-4171-84a6-29b4207c2e32.png)
@@ -1879,6 +1879,25 @@ else:
 ![sp_streamlit_render_service.png](ef15c655-62c1-4547-bbb6-bc82de90294e.png)
 
 ### 1.6.2 Application Testing <a class="anchor" id="1.6.2"></a>
+
+1. The complete application was tested by verifying the functionality of the FastAPI backend and the Streamlit UI deployed on Render with the following steps:
+    * **Started the FastAPI Service**
+        * Accessed the FastAPI Docker image via its public Render URL ([https://heart-failure-survival-probability.onrender.com/](https://heart-failure-survival-probability.onrender.com/)).
+    * **Accessed the Streamlit UI**
+        * Opened the deployed Streamlit app through its Render URL ([https://heart-failure-survival-estimation.onrender.com/](https://heart-failure-survival-estimation.onrender.com/)).
+    * **Tested User Inputs**
+        * Used range sliders to enter numerical values for cardiovascular, hematologic, and metabolic markers.
+        * Used radio buttons to select binary categories (Present | Absent) for hematologic and cardiovascular conditions.
+    * **Executed Model Prediction Workflow**
+         * Enabled the `Assess Characteristics Against Study Population + Plot Survival Probability Profile + Estimate Heart Failure Survival Probability + Predict Risk Category` action button to trigger the entire pipeline:
+             * Plotted study population data as a baseline comparison.
+             * Processed the user’s test case inputs and displayed them in visualization charts.
+             * Executed computations for survival probability estimation.
+             * Predicted the test case's survival probability and risk category.
+    * **Verified Output Accuracy and API Response**
+         * Ensured that FastAPI correctly processed the test case inputs and returned expected results.
+         * Checked that Streamlit displayed the survival probability plots, numerical estimations, and risk classification without errors.
+
 
 ![sp_application_render_service.png](bb50ebe0-785b-40d3-8746-c6387e2c4aff.png)
 
