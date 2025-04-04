@@ -36,9 +36,7 @@
 
 This project explores **open-source solutions for containerizing and deploying machine learning API endpoints**, focusing on the implementation of a heart failure survival prediction model as a web application in <mark style="background-color: #CCECFF"><b>Python</b></mark>. The objective was to operationalize a **Cox Proportional Hazards Regression** survival model by deploying an interactive UI that enables users to input cardiovascular, hematologic, and metabolic markers and receive survival probability estimates at different time points. The project workflow involved multiple stages: first, a RESTful API was developed using the **FastAPI** framework to serve the survival prediction model. The API was tested locally to ensure correct response formatting and model inference behavior. Next, the application was containerized using **Docker**, enabling a reproducible and portable environment. The Docker image was built, tested, and pushed to **DockerHub** for persistent storage before being deployed on **Render**, an open-source cloud platform for hosting containerized applications. To enable user interaction, a web-based interface was developed using **Streamlit**. The UI facilitated data input via range sliders and radio buttons, processed user entries, and sent requests to the **FastAPI** backend for prediction and visualization. The **Streamlit** app was then deployed on **Render** to ensure full integration with the containerized API. End-to-end testing verified the functionality of the deployed application, confirming that API endpoints, model predictions, and UI elements worked seamlessly together. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document.
 
-[Machine Learning Model Deployment](https://www.oreilly.com/library/view/building-machine-learning/9781492045106/), also known as model operationalization, is the process of integrating a trained model into a production environment where it can generate real-world predictions. This involves packaging the model, along with its dependencies, into a scalable and reliable system that can handle user requests and return predictions in real time. Deployment strategies can range from embedding models into web applications via RESTful APIs to deploying them in containerized environments using Docker and Kubernetes for scalability.
-
-Operationalization goes beyond deployment by ensuring continuous monitoring, retraining, and version control to maintain model performance over time. It involves addressing challenges like data drift, latency, and security while optimizing infrastructure for efficiency. By automating model serving, updating, and logging, machine learning operationalization bridges the gap between development and real-world application, enabling AI-driven decision-making in various domains, from healthcare and finance to manufacturing and e-commerce.
+[Machine Learning Model Deployment](https://www.oreilly.com/library/view/building-machine-learning/9781492045106/), also known as model operationalization, is the process of integrating a trained model into a production environment where it can generate real-world predictions. This involves packaging the model, along with its dependencies, into a scalable and reliable system that can handle user requests and return predictions in real time. Deployment strategies can range from embedding models into web applications via RESTful APIs to deploying them in containerized environments using Docker and Kubernetes for scalability. Operationalization goes beyond deployment by ensuring continuous monitoring, retraining, and version control to maintain model performance over time. It involves addressing challenges like data drift, latency, and security while optimizing infrastructure for efficiency. By automating model serving, updating, and logging, machine learning operationalization bridges the gap between development and real-world application, enabling AI-driven decision-making in various domains, from healthcare and finance to manufacturing and e-commerce.
 
 [RESTful APIs](https://www.oreilly.com/library/view/building-machine-learning/9781492045106/) provide a standardized way to expose machine learning models as web services, allowing clients to interact with them over HTTP using common methods such as GET, POST, PUT, and DELETE. RESTful APIs enable seamless communication between different applications and systems, making it easy to integrate predictive models into web and mobile applications. They ensure scalability by decoupling the frontend from the backend, enabling multiple users to send requests simultaneously. In machine learning deployment, RESTful APIs facilitate real-time inference by accepting user input, processing data, invoking model predictions, and returning responses in a structured format such as JSON. Their stateless nature ensures reliability and consistency, while features like authentication, caching, and error handling improve security and performance.
 
@@ -1952,13 +1950,15 @@ else:
         * The complete application was tested by verifying API responses, UI interactions, and model predictions.
         * The public URLs of both the FastAPI backend and the Streamlit UI were used to validate functionality.
 3. The end-to-end deployment of a machine learning model using open-source platforms was successfully demonstrated. The approach highlights how open-source tools can be effectively leveraged for machine learning model deployment in production environments.
-    * **FastAPI** ensured efficient API development
-    * **Docker** enabled portability
-    * **DockerHub** provided persistent storage
-    * **Render** facilitated cloud deployment
+    * **FastAPI** ensured efficient API development.
+    * **Docker** enabled portability.
+    * **DockerHub** provided persistent storage.
+    * **Render** facilitated cloud deployment.
     * **Streamlit** made UI development seamless. 
 
 # 2. Summary <a class="anchor" id="Summary"></a>
+
+![Project60_Summary.png](d4ca028d-5020-41e7-a2b1-6da6b46b6b71.png)
 
 # 3. References <a class="anchor" id="References"></a>
 * **[Book]** [Building Machine Learning Powered Applications: Going From Idea to Product](https://www.oreilly.com/library/view/building-machine-learning/9781492045106/) by Emmanuel Ameisen
@@ -1999,6 +1999,10 @@ else:
 * **[Python Library API]** [Lifelines](https://lifelines.readthedocs.io/en/latest/) by Lifelines Team
 * **[Python Library API]** [Streamlit](https://streamlit.io/) by Streamlit Team
 * **[Python Library API]** [Streamlit Community Cloud](https://streamlit.io/cloud) by Streamlit Team
+* **[Python Library API]** [FastAPI](https://fastapi.tiangolo.com/) by FastAPI Team
+* **[Framework]** [Docker](https://www.docker.com/) by Docker Team
+* **[Framework]** [DockerHub](https://hub.docker.com/) by DockerHub Team
+* **[Framework]** [Render](https://render.com/) by Render Team
 * **[Article]** [ML - Deploy Machine Learning Models Using FastAPI](https://dorian599.medium.com/ml-deploy-machine-learning-models-using-fastapi-6ab6aef7e777) by Dorian Machado (Medium)
 * **[Article]** [Deploying Machine Learning Models Using FastAPI](https://medium.com/@kevinnjagi83/deploying-machine-learning-models-using-fastapi-0389c576d8f1) by Kevin Njagi (Medium)
 * **[Article]** [Deploy Machine Learning API with FastAPI for Free](https://lightning.ai/lightning-ai/studios/deploy-machine-learning-api-with-fastapi-for-free?section=featured) by Aniket Maurya (Lightning.AI)
